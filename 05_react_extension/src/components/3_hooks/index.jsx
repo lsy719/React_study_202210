@@ -47,18 +47,25 @@ class index extends Component {
 }
 
 export default function Demo(){
-
   const [count,setCount] = React.useState(0);
   const [name,setName] = React.useState(true);
   const myRef = React.useRef();
-
-  // 第二个参数不写，谁都检测，写空数组，谁也不检测，相当于didMount，在数组里写上要监测的状态。
+  
+  // 第二个参数不写，谁都检测，写空数组，谁也不检测，相当于didMount(只执行一次)，在数组里写上要监测的状态。
   React.useEffect(() => {
     let timer = setInterval(() => {
       setCount(count => count + 1)
     },1000)
+    
+    /* 
+      关于return的触发条件：
+      当第二个参数不写时，更新一次调用一次；如上，由于是定时器，所以一直更新，一直调用
+      当第二个参数为空数组时，只在组件销毁时调用
+      当第二个参数指定了监测的状态后，则根据状态来调用
+    */
     return () => {
       clearInterval(timer);
+      console.log('组件销毁');
     }
   },[])
 
