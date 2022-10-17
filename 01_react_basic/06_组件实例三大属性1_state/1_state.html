@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+	<script type="text/javascript" src="../js/react.development.js"></script>
+	<script type="text/javascript" src="../js/react-dom.development.js"></script>
+	<script type="text/javascript" src="../js/babel.min.js"></script>
+	<div id="test"></div>
+
+    <script type="text/babel">
+        let that
+        // 1.创建组件
+        class Weather extends React.Component {
+            // 构造器调用几次？————1次
+            constructor(props) {
+                console.log('constructor')
+                super(props) 
+                this.state = {
+                    isHot:true,
+                    wind:'大风',
+                }
+                that = this;
+                // 解决changeWeather中this指向问题
+                this.changeWeatherFixed = this.changeWeather.bind(this)
+            }
+            // render调用几次？————1+n次 1是初始化的那次,n是状态更新的次数
+            render() {
+                console.log('render')
+                // console.log(this)
+                // 读取状态
+                let {isHot,wind} = this.state;
+                // 不要写()，要明白()是来调函数的，这里只要指定是哪个函数，点的时候它来调
+                // return <h1 onClick={demo}>今天天气很{isHot ? '炎热':'凉爽'}</h1>
+
+                return <h1 onClick={this.changeWeatherFixed}>今天天气很{isHot ? '炎热':'凉爽'},{wind}</h1>
+                /* 
+                    这样根本不是通过实例调用，在还是类的时候就把这个weather函数给事件了，
+                    渲染时类被实例化出来，触发事件执行的函数依然是过去class里面给他赋的那个函数
+                    但是在那时函数声明时，其内部的this是undefined，相当于是'use strict'
+                    但是我自己new一个实例拿来用就不会
+                */
+            }
+            // changeWeather？————点几次调几次
+            changeWeather(){
+                console.log('changeWeather');
+                // changeWeather放在哪里？ --- Weather的原型对象上，供实例使用
+                // 【通过Weather【实例】调用】changeWeather时，changeWeather中的this【才是】Weather实例
+                // 由于changeWeather是作为onClick的回调，所以不是通过实例调用的，是直接调用
+                // 类中的方法默认开启了局部的严格模式，所以changeWeather中的this为undefined
+                // 【通过26行代码解决】
+                // console.log(this);//undefined
+
+                // 获取原来的isHot的值
+                const isHot = this.state.isHot;
+                //严重注意：状态必须通过setState进行更新,且更新是一种合并(重名的替换，wind不改依然在)，不是替换。
+                this.setState({isHot:!isHot})
+                console.log(this.state.isHot)
+
+                //严重注意：状态(state)不可直接更改，下面这行就是直接更改！！！
+				//this.state.isHot = !isHot //这是错误的写法
+            }
+        }
+        /* const w = new Weather()
+        w.changeWeather() */
+        ReactDOM.render(<Weather/>, document.getElementById('test'))
+        /* const title = document.getElementById('title'); */
+        /* title.addEventListener('click',() => {
+            console.log('标题被点击了')
+        }) */
+        /* title.onclick = () => {
+            console.log('标题被点击了')
+        } */
+        /* function demo(){
+            console.log('标题被点击了')
+            console.log('此处修改isHot的值')
+            console.log(that.state.isHot)
+        } */
+        // 箭头函数不行
+        /* let demo = ()=>{
+            console.log('标题被点击了')
+        } */
+    </script>
+</body>
+</html>

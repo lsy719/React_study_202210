@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 引入react核心库 -->
+	<script type="text/javascript" src="../js/react.development.js"></script>
+	<!-- 引入react-dom，用于支持react操作DOM -->
+	<script type="text/javascript" src="../js/react-dom.development.js"></script>
+	<!-- 引入babel，用于将jsx转为js -->
+	<script type="text/javascript" src="../js/babel.min.js"></script>
+    <!-- 引入prop-types，用于对组件标签属性进行限制 -->
+    <script src="../js/prop-types.js"></script><!-- 因为不一定用，所有在16版本就不在React上进行调用了，需自己引入依赖包 -->
+
+    <!-- 准备好一个“容器” -->
+	<div id="test1"></div>
+	<div id="test2"></div>
+	<div id="test3"></div>
+
+    <script type="text/babel">
+        class Person extends React.Component{
+            /* 
+                在 React 组件挂载之前，会调用它的构造函数。
+                在为 React.Component 子类实现构造函数时，
+                应在其他语句之前调用 super(props)。
+                否则，this.props 在构造函数中可能会出现未定义的 bug。
+            */
+            constructor(props){
+                // 构造器是否接收props，是否传递给super，取决于：是否希望在构造器中通过this访问props
+                // 此为【及其罕见的情况】，所以构造器一般还是不用写
+                console.log(props);
+                super(props);
+                console.log('constructor',this.props)//接到实例自身的props，如果props不接且不用super传，那类的实例中就无法访问到（undefined）
+            }
+
+            static propTypes = {
+                name: PropTypes.string.isRequired,//限制name必穿，且为字符串
+                sex: PropTypes.string,//限制sex为字符串
+                age: PropTypes.number,//限制age为数值
+                speak: PropTypes.func,//限制speak为函数
+            }
+            static defaultProps = {
+                sex:'unknown',
+                age:18
+            }
+            render(){
+                // console.log(this)
+                const {name, sex, age} = this.props;
+                // props是只读的
+                // this.props.name = 'jack'
+                return (
+                    <ul>
+                        <li>姓名：{name}</li>    
+                        <li>性别：{sex}</li>    
+                        <li>年龄：{age+1}</li>    
+                    </ul>
+                )
+            }
+        }
+        // 对标签属性进行类型、必要性的限制
+        /* Person.propTypes = {
+            name: PropTypes.string.isRequired,//限制name必穿，且为字符串
+            sex: PropTypes.string,//限制sex为字符串
+            age: PropTypes.number,//限制age为数值
+            speak: PropTypes.func,//限制speak为函数
+        } */
+        // 指定默认标签属性值
+        /* Person.defaultProps = {
+            sex:'unknown',
+            age:18
+        } */
+
+        ReactDOM.render(<Person name = 'tom' age = {18} sex = '男' speak = {speak}/>,document.getElementById('test1'))
+        ReactDOM.render(<Person name = 'lll'/>,document.getElementById('test2'))
+        
+        const p = {name:'jerry',age:18, sex:'男' }
+        // react+babel允许通过...去展开一个对象【在此作用也是展开】，原生不能用...去展开对象（只能展开数组或是用{}包裹进行深拷贝）
+        ReactDOM.render(<Person {...p}/>,document.getElementById('test3'))
+        // console.log('@',...p);//但也不允许随便去使用，只允许标签传递数据时使用
+        function speak(){
+            console.log('speak')
+        }
+    </script>
+</body>
+</html>

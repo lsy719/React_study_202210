@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 引入react核心库 -->
+	<script type="text/javascript" src="../js/react.development.js"></script>
+	<!-- 引入react-dom，用于支持react操作DOM -->
+	<script type="text/javascript" src="../js/react-dom.development.js"></script>
+	<!-- 引入babel，用于将jsx转为js -->
+	<script type="text/javascript" src="../js/babel.min.js"></script>
+    <!-- 引入prop-types，用于对组件标签属性进行限制 -->
+    <script src="../js/prop-types.js"></script>
+
+    <!-- 准备好一个“容器” -->
+	<div id="test"></div>
+
+    <script type="text/babel">
+        class Demo extends React.Component {
+            state = {isHot:true}
+            render(){
+                const {isHot} = this.state;
+                return (
+                    <div>
+                        <h2>今天天气很{isHot? '炎热' : '凉爽'}</h2>
+                        {/*<input ref = {c => {this.input1 = c;console.log('@',c)}} type="text"/>*/}
+                        <input ref = {this.saveInput} type="text"/>
+                        <button onClick={this.showInfo}>点我提示输入数据</button>
+                        <button onClick={this.changeWeacher}>点我切换天气</button>
+                    </div>
+                )
+            }
+            /* 
+                如果 ref 回调函数是以内联函数的方式定义的，
+                在更新过程中它会被执行两次，第一次传入参数 null，然后第二次会传入参数 DOM 元素。
+                这是因为在每次渲染时会创建一个新的函数实例，所以 React 清空旧的 ref 并且设置新的。
+                通过将 ref 的回调函数定义成 class 的绑定函数的方式可以避免上述问题
+                
+                但是大多数情况下它是无关紧要的。
+            */
+            saveInput = (c) => {
+                console.log('@',c);
+            }
+
+            showInfo = ()=>{//不是页面更新，只是一个简单的页面交互
+                const {input1} = this
+                console.log(input1.value)
+            }
+            changeWeacher = ()=>{//页面更新
+                const {isHot} = this.state;
+                this.setState({isHot:!isHot})
+            }
+            
+        }
+
+        ReactDOM.render(<Demo/>,document.getElementById('test'))
+    </script>
+</body>
+</html>

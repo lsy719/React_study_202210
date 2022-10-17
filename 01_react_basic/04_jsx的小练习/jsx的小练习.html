@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 引入react核心库 -->
+	<script type="text/javascript" src="../js/react.development.js"></script>
+	<!-- 引入react-dom，用于支持react操作DOM -->
+	<script type="text/javascript" src="../js/react-dom.development.js"></script>
+	<!-- 引入babel，用于将jsx转为js -->
+	<script type="text/javascript" src="../js/babel.min.js"></script>
+
+    <!-- 准备好一个“容器” -->
+	<div id="test"></div>
+    <div id="test2"></div>
+
+    <script type="text/babel">
+        /* 
+            一定要注意区分：【js语句（代码）】与【js表达式】
+                1.表达式：一个表达式会产生一个值，可以放在任何一个需要值的地方
+                    下面这些都是表达式(能用变量接到值)
+                        (1). a 
+                        (2). a+b
+                        (3). demo(1)
+                        (4). arr.map() 
+                        (5). function test () {}
+                2.语句（代码）：
+                    下面这些都是语句(代码)：
+                        (1).if(){}
+                        (2).for(){}
+						(3).switch(){case:xxxx}
+        */
+        // 模拟一些数据
+        const data = ['Angular','Vue','React'];
+        const data2 = [
+            {id:'001',value:'Angular'},
+            {id:'002',value:'Vue'},
+            {id:'003',value:'React'},
+        ]
+        // 1.创建虚拟DOM
+        const VDOM = (
+            <div>
+                <h1>前端js框架列表</h1>
+                <ul>
+                    {data.map((elem, index) => { // 这么写会导致严重问题（index作为key）
+                        return <li key = {index}>{elem}</li>
+                    })}
+                </ul>
+            </div>
+        );
+        const VDOM2 = (
+            <div>
+                <h1>前端js框架列表</h1>
+                <ul>
+                    {
+                        data2.map((item) => {
+                            return <li key = {item.id}>{item.value}</li>
+                        })
+                    }
+                </ul>
+            </div>
+        )
+        // 2.渲染虚拟DOM到页面
+        ReactDOM.render(VDOM, document.getElementById('test'))
+        ReactDOM.render(VDOM2, document.getElementById('test2'))
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+	<script type="text/javascript" src="../js/react.development.js"></script>
+	<script type="text/javascript" src="../js/react-dom.development.js"></script>
+	<script type="text/javascript" src="../js/babel.min.js"></script>
+    <script src="../js/prop-types.js"></script>
+
+	<div id="test"></div>
+
+    <!-- 此即为非受控组件，现写现用 -->
+    <!-- 不受状态控制，没有value，采用ref直接操作DOM -->
+    <script type="text/babel">
+        class Login extends React.Component {
+            render(){
+                return (
+                    <form action="#" onSubmit = {this.handleSubmit}>
+                        用户名：<input ref={c => this.usernameIn = c} type="text" name='username'/>
+                        密码：<input ref={c => this.passwordIn = c} type="password" name='password'/>
+                        <button>登录</button>
+                    </form>
+                )
+            }
+            handleSubmit = (event) => {
+                event.preventDefault();//阻止默认事件（表单提交）
+                const {usernameIn, passwordIn} = this;
+                alert(`用户名：${usernameIn.value}, 密码：${passwordIn.value}`)
+            }
+        }
+        ReactDOM.render(<Login/>,document.getElementById('test'))
+    </script>
+</body>
+</html>

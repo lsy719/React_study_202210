@@ -1,0 +1,93 @@
+import React, { Component } from 'react'
+// eslint-disable-next-line
+import ReactDOM from 'react-dom'
+import root from '../..'
+
+// eslint-disable-next-line
+class index extends Component {
+  state = {count:0}
+  myRef = React.createRef();
+  add = () => {
+    this.setState((state,props) => {
+      console.log(state,props);
+      return {count:state.count + 1}
+    })
+  }
+
+  unmount = () => {
+    // ReactDOM.unmountComponentAtNode(document.getElementById('root'))
+    root.unmount();
+  }
+
+  show = () => {
+    alert(this.myRef.current.value);
+  }
+
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      this.setState( state => ({count:state.count + 1}))
+    },1000)
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  render() {
+    return (
+      <div>
+        <h2>当前求和为{this.state.count}</h2>
+        <button onClick={this.add}>+1</button>
+        <button onClick={this.unmount}>卸载组件</button>
+        <button onClick={this.show}>提示信息</button>
+        <input type="text" ref={this.myRef} />
+      </div>
+    )
+  }
+}
+
+export default function Demo(){
+
+  const [count,setCount] = React.useState(0);
+  const [name,setName] = React.useState(true);
+  const myRef = React.useRef();
+
+  // 第二个参数不写，谁都检测，写空数组，谁也不检测，相当于didMount，在数组里写上要监测的状态。
+  React.useEffect(() => {
+    let timer = setInterval(() => {
+      setCount(count => count + 1)
+    },1000)
+    return () => {
+      clearInterval(timer);
+    }
+  },[])
+
+  function add(){
+    // setCount(count+1) //第一种写法
+    setCount(count => count + 1)
+  }
+
+  function change(){
+    setName( name => !name)
+  }
+  function unmount(){
+    root.unmount()
+  }
+  function show(){
+    alert(myRef.current.value);
+  }
+  return (
+    <div>
+      <h2>当前求和为{count}</h2>
+      <div>
+        {name ? <h2 style = {{color:'red'}}>amd yes</h2> : <h2 style = {{color:'green'}}>nvidia fku</h2>}
+      </div>
+      
+      <button onClick={add}>+1</button>
+      <button onClick={change}>change</button>
+      <button onClick={unmount}>卸载组件</button>
+      <button onClick={show}>提示信息</button>
+        <input type="text" ref={myRef} />
+    </div>
+  )
+} 

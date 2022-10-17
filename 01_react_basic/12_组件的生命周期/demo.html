@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .list{
+            width: 200px;
+            height: 150px;
+            background-color: skyblue;
+            overflow: auto;
+        }
+        .news{
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="list">
+        <div class="news">新闻7</div>
+        <div class="news">新闻6</div>
+        <div class="news">新闻5</div>
+        <div class="news">新闻4</div>
+        <div class="news">新闻3</div>
+        <div class="news">新闻2</div>
+        <div class="news">新闻1</div>
+    </div>
+    <script>
+        const list = document.getElementsByClassName('list')[0]
+        list.addEventListener('scroll',()=>{
+            console.log(list.scrollHeight); // 【总高度】 210 7条新闻 7*30
+            console.log(list.scrollTop); // 当前滚动条位置（距离顶端位置）
+        })
+        // list.scrollTop = 30
+        // console.log(list.scrollHeight); // 210 7条新闻 7*30
+        // console.log(list.scrollTop); // 当前滚动条位置
+    </script>
+</body>
+</html>

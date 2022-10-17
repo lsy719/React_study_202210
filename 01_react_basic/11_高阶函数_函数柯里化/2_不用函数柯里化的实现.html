@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+	<script type="text/javascript" src="../js/react.development.js"></script>
+	<script type="text/javascript" src="../js/react-dom.development.js"></script>
+	<script type="text/javascript" src="../js/babel.min.js"></script>
+    <script src="../js/prop-types.js"></script>
+
+	<div id="test"></div>
+
+    <!-- 用value和组件的state绑定，当value更新时，会自动更新state -->
+    <script type="text/babel">
+        class Login extends React.Component {
+            render(){
+                return (
+                    <form action="#" onSubmit = {this.handleSubmit}>
+                        用户名：<input onChange = {event => {this.saveFormData('username',event)}} type="text" name='username'/>
+                        密码：<input onChange = {event => {this.saveFormData('password',event)}} type="password" name='password'/>
+                        <button>登录</button>
+                    </form>
+                )
+            }
+            // 初始化状态
+            state = {
+                username: '',//用户名
+                password: '',//密码
+            }
+            handleSubmit = (event) => {
+                event.preventDefault();//阻止默认事件（表单提交）
+                const {username, password} = this.state;
+                alert(`用户名：${username}, 密码：${password}`)
+            }
+            // 保存保单数据到状态中
+            saveFormData = (dataType,event) => {
+                this.setState({[dataType]:event.target.value})
+            }
+        }
+        ReactDOM.render(<Login/>,document.getElementById('test'))
+    </script>
+</body>
+</html>
