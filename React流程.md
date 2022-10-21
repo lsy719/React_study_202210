@@ -81,6 +81,7 @@ react_app
 
 ### 1.配置代理
 
+ 安装axios
 ​	src下创建setupProxy.js
 
 ```js
